@@ -27,7 +27,7 @@ This is a comprehensive documentation website for Spring Security implementation
 - ✅ **No Backend Required**: Pure HTML/CSS/JS with Bootstrap
 
 ## 📁 Project Structure
-'''
+```
 spring-security-docs/
 ├── index.html # Main documentation page
 ├── README.md # This file
@@ -39,7 +39,7 @@ spring-security-docs/
 │ └── ... (all your images)
 └── (optional folders)
 └── css/ # Additional CSS if needed
-'''
+```
 
 
 ## 🔧 Setup Instructions
