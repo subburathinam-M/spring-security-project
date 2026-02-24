@@ -1,100 +1,505 @@
+# Spring Security Project - Stateful & Stateless Authentication
 
-# Spring Security Documentation & API Testing Guide
-
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
 ![Spring Security](https://img.shields.io/badge/Spring_Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white)
-![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
-![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-222222?style=for-the-badge&logo=githubpages&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
 
-Live Demo: [https://yourusername.github.io/spring-security-docs](https://yourusername.github.io/spring-security-docs)
-
-## 📖 Overview
-
-This is a comprehensive documentation website for Spring Security implementation featuring both **Stateful (with CSRF)** and **Stateless (no CSRF)** configurations. The site includes:
-
-- **Stateful Mode**: Full CSRF protection with session management
-- **Stateless Mode**: REST API focused, no CSRF tokens needed
-- **Interactive Testing Guide**: Step-by-step API testing with screenshots
-- **Implementation Code**: Complete Java configuration examples
-- **Troubleshooting**: Common errors and solutions
-
-## 🚀 Features
-
-- ✅ **Dual Mode Support**: Toggle between Stateful/Stateless implementations
-- ✅ **Visual Guides**: Screenshots and diagrams for better understanding
-- ✅ **Code Examples**: Ready-to-use Spring Security configuration
-- ✅ **API Testing**: Complete Postman/curl testing instructions
-- ✅ **Mobile Responsive**: Works perfectly on all devices
-- ✅ **No Backend Required**: Pure HTML/CSS/JS with Bootstrap
-
-## 📁 Project Structure
-```
-spring-security-docs/
-├── index.html # Main documentation page
-├── README.md # This file
-├── .gitignore # Git ignore rules
-├── images/ # All screenshots and diagrams
-│ ├── forbiddend.png
-│ ├── unauthorized.png
-│ ├── get-csrf-token-endpoint.png
-│ └── ... (all your images)
-└── (optional folders)
-└── css/ # Additional CSS if needed
-```
-
-
-## 🔧 Setup Instructions
-
-### Local Viewing
-Simply open `index.html` in any modern web browser.
-
-### GitHub Pages Deployment
-1. Push to GitHub repository
-2. Go to Repository Settings → Pages
-3. Select "Deploy from branch"
-4. Choose `main` branch and `/root` folder
-5. Save - Your site will be live at `https://username.github.io/repository-name`
-
-## 🧪 Testing the Documentation
-
-### Stateful Mode (CSRF Enabled)
-1. Click "Stateful (CSRF)" button
-2. Follow CSRF token acquisition steps
-3. Test POST endpoints with X-CSRF-TOKEN header
-
-### Stateless Mode (CSRF Disabled)
-1. Click "Stateless (No CSRF)" button
-2. Test endpoints with only HTTP Basic Auth
-3. No CSRF tokens required
-
-## 📸 Screenshots
-
-| Stateful Mode | Stateless Mode |
-|--------------|---------------|
-| ![Stateful](images/forbiddend.png) | ![Stateless](images/stateless-null-csrf.png) |
-
-## 📚 Resources
-
-### External Articles Referenced
-- **[Stateful CSRF Guide](https://medium.com/@thecodebean/implementing-csrf-security-in-a-spring-boot-application-d1e1d128ca1d)** - Detailed CSRF implementation
-- **[Stateless REST API Security](https://www.baeldung.com/csrf-stateless-rest-api)** - Baeldung guide on CSRF for stateless APIs
-
-### Spring Security Official Docs
-- [Spring Security Reference](https://docs.spring.io/spring-security/reference/index.html)
-- [Spring Boot Security](https://spring.io/guides/gs/securing-web/)
-
-## 👥 Contributors
-
-- **Subburathinam M** - Documentation & Implementation
-- [Add contributors here]
-
-## 📄 License
-
-This documentation is provided under the [MIT License](LICENSE).
-
-## ⭐ Support
-
-If you find this documentation helpful, please give it a ⭐ on GitHub!
+**📚 Live Documentation:** [https://subburathinam-m.github.io/spring-security-docs/](https://subburathinam-m.github.io/spring-security-docs/)
 
 ---
 
-*Built with ❤️ using Bootstrap 5, Highlight.js, and Font Awesome*
+## 📖 Overview
+
+A comprehensive Spring Security implementation demonstrating both **Stateful (with CSRF)** and **Stateless (no CSRF)** authentication modes. This project serves as a practical guide for implementing role-based access control in Spring Boot applications.
+
+---
+
+## 📊 System Architecture Flow
+
+```mermaid
+graph TD
+    A[🌐 Client Request] --> B[🛡️ Spring Security Filter Chain]
+    B --> C{🔐 Authentication Check}
+    C -->|✅ Success| D[👑 Authorization Check]
+    C -->|❌ Failure| E[🚫 401 Unauthorized]
+    D -->|✅ Has Role| F[🎯 Access Granted]
+    D -->|❌ No Role| G[🚷 403 Forbidden]
+    F --> H[⚙️ Controller Processing]
+    H --> I[🔧 Service Layer]
+    I --> J[🗃️ Database]
+    J --> K[📤 Response to Client]
+    
+    subgraph "🔀 Authentication Modes"
+        L[🔄 Stateful Mode] --> M[🔒 CSRF Enabled<br/>💾 Session Based]
+        N[⚡ Stateless Mode] --> O[🚫 CSRF Disabled<br/>🔑 HTTP Basic Auth]
+    end
+
+```
+
+
+# 📈 Flow Diagram
+
+┌─────────────────┐     ┌─────────────────────┐     ┌─────────────────────┐
+│    🌐 Client    │────▶│   🛡️ Spring Security  │────▶│   🔐 Authentication   │
+│    📤 Request   │     │   🔗 Filter Chain    │     │     ⚙️ Provider       │
+└─────────────────┘     └─────────────────────┘     └─────────────────────┘
+                                                                │
+                                                                ▼
+┌─────────────────┐     ┌─────────────────────┐     ┌─────────────────────┐
+│    📥 Response  │◀────│   ⚙️ Controller      │◀────│  🔍 UserDetailsService │
+│                 │     │   🎯 Layer           │     │                     │
+└─────────────────┘     └─────────────────────┘     └─────────────────────┘
+                                                                │
+                                                                ▼
+                                                        ┌─────────────────────┐
+                                                        │   💾 JPA Repository  │
+                                                        │   🗃️ (Database)      │
+                                                        └─────────────────────┘
+
+# 🚀 Features
+
+## 🔐 Authentication & Authorization
+
+### 🔀 Dual Authentication Modes
+- Toggle between **Stateful** and **Stateless** authentication
+
+### 👥 Role-Based Access Control (RBAC)
+- **ADMIN / USER** roles with proper authorization
+- Granular permission management
+
+### 🔐 BCrypt Password Encoding
+- Secure password hashing with **strength 12**
+- Industry-standard security practices
+
+# 🛡️ Security Features
+
+## 🛡️ CSRF Protection
+- **Enabled in Stateful mode** for traditional web applications
+- **Disabled in Stateless mode** for API-based architectures
+
+## 🔒 Session Management
+- **STATELESS policy implementation** for better scalability
+- Optimized for distributed systems and microservices
+
+## 🔑 HTTP Basic Authentication
+- Simple and effective **API authentication** mechanism
+- Base64-encoded credentials for straightforward integration
+
+# 💾 Database & Persistence
+
+## 🗃️ MySQL Integration
+- **JPA with Hibernate** for robust data persistence
+- ORM-based database interactions
+
+## 📝 Entity Relationships
+- Properly mapped **JPA entities** with correct associations
+- Supports One-to-One, One-to-Many, and Many-to-Many relationships
+
+## 🔍 Repository Pattern
+- Clean **data access layer** abstraction
+- Spring Data JPA repositories for simplified database operations
+
+# 🌐 API Features
+
+## 🌐 RESTful API Endpoints
+- Complete **CRUD operations** (Create, Read, Update, Delete)
+- Resource-oriented design following REST principles
+
+## 📊 JSON Responses
+- Clean and **structured API responses**
+- Consistent response format across all endpoints
+
+## ⚡ Stateless Operations
+- **No session storage** for better scalability
+- Designed for horizontal scaling and load balancing
+
+## 🏗️ Project Structure
+```
+📁 SpringSecurityProject/
+├── 📁 src/
+│   ├── 📁 main/
+│   │   ├── 📁 java/
+│   │   │   └── 📁 com/
+│   │   │       └── 📁 example/
+│   │   │           └── 📁 springSecurity/
+│   │   │               ├── 📄 SpringSecurityApplication.java
+│   │   │               ├── 📁 config/
+│   │   │               │   └── 📄 SecurityConfiguration.java
+│   │   │               ├── 📁 DemoController/
+│   │   │               │   ├── 📄 HelloController.java
+│   │   │               │   ├── 📄 StudentController.java
+│   │   │               │   └── 📄 UsersController.java
+│   │   │               ├── 📁 entity/
+│   │   │               │   ├── 📄 Student.java
+│   │   │               │   ├── 📄 Users.java
+│   │   │               │   └── 📄 UserPrincal.java
+│   │   │               ├── 📁 repository/
+│   │   │               │   ├── 📄 StudentRepository.java
+│   │   │               │   └── 📄 UserDetailRepo.java
+│   │   │               ├── 📁 service/
+│   │   │               │   ├── 📄 MyUserDetailsService.java
+│   │   │               │   ├── 📄 PasswordHasher.java
+│   │   │               │   ├── 📄 StudentService.java
+│   │   │               │   └── 📄 UsersService.java
+│   │   └── 📁 resources/
+│   │       └── 📄 application.properties
+├── 📄 pom.xml
+├── 📄 README.md
+├── 📄 .gitignore
+└── 📄 LICENSE (optional)
+``` 
+
+# ⚙️ Prerequisites
+
+## 📋 System Requirements
+- **Java Development Kit (JDK)** 17 or higher
+- **Apache Maven** 3.6+ or **Gradle** 7+
+- **MySQL Database** 8.0+
+- **Git** for version control
+
+## 🛠️ Development Tools
+- **IDE**: IntelliJ IDEA, Eclipse, or VS Code with Java extensions
+- **Database Client**: MySQL Workbench or DBeaver
+- **API Testing**: Postman or cURL
+- **Browser**: Modern web browser for testing
+
+
+
+# 🛠️ Configuration
+
+## 1️⃣ Database Setup
+
+### Create the Database
+```sql
+-- Create the database
+CREATE DATABASE securitydemo;
+
+-- Switch to the database
+USE securitydemo;
+
+-- Verify database creation
+SHOW DATABASES;
+
+
+## 2️⃣ Application Properties
+
+### Create `src/main/resources/application.properties`:
+
+```
+# 🌐 Server Configuration
+server.port=8080
+spring.application.name=springSecurity
+
+# 🗃️ Database Configuration
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.url=jdbc:mysql://localhost:3306/securitydemo
+spring.datasource.username=root
+spring.datasource.password=1234
+
+# ⚙️ JPA Configuration
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+spring.jpa.properties.hibernate.format_sql=true
+
+# 👤 Default User (for testing)
+spring.security.user.name=subbu
+spring.security.user.password=123
+
+# 📝 Logging Configuration
+```
+logging.level.org.springframework.security=DEBUG
+logging.level.org.springframework.web=DEBUG
+
+
+# Database Configuration
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.url=jdbc:mysql://localhost:3306/securitydemo
+spring.datasource.username=root
+spring.datasource.password=1234
+
+# JPA Configuration
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+
+# Default User (for testing)
+spring.security.user.name=subbu
+spring.security.user.password=123
+```
+
+
+## 3️⃣ Initial Admin User Setup
+
+### Generate BCrypt Hash
+```java
+// Run PasswordHasher.java to generate BCrypt hash
+BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+String encodedPassword = encoder.encode("yourpassword");
+System.out.println("🔐 Hashed Password: " + encodedPassword);
+
+// Insert into database
+-- Insert into database using SQL
+INSERT INTO users (id, username, password, role) 
+VALUES (1, 'admin', '$2a$12$YourGeneratedHash', 'ADMIN');
+```
+-- Note: Replace '$2a$12$YourGeneratedHash' with the actual BCrypt hash generated from the Java code above.
+
+
+
+### 🚦 Running the Application
+
+# Method 1: Using Maven
+
+```
+# Clean and compile
+mvn clean compile
+
+# Run the application
+mvn spring-boot:run
+```
+# Method 2: Using IDE
+
+1. Open project in IntelliJ/Eclipse
+
+2. Locate SpringSecurityApplication.java
+
+3. Run as Java Application
+
+# Method 3: Build JAR and Run
+
+```
+# Package the application
+mvn clean package
+
+# Run the JAR file
+java -jar target/spring-security-project-1.0.0.jar
+```
+
+
+## 🔧 API Endpoints
+
+### 📍 Public Endpoints
+
+| Method | Endpoint | Description |
+|------|---------|-------------|
+| GET | /public/home | Welcome page |
+| GET | /public/demo | Public demo |
+| GET | /csrf | CSRF token (null in stateless) |
+
+
+# 🔌 API Endpoints
+
+## 👤 User Endpoints (Requires USER/ADMIN role)
+
+| Method | Endpoint | Description | CSRF Required |
+|--------|----------|-------------|---------------|
+| GET | `/` | Home page with session ID | No |
+| GET | `/user/about` | User information page | No |
+| GET | `/student` | Get all students | No |
+| POST | `/student` | Add new student | No (Stateless) |
+| PUT | `/student/{id}` | Update student | No (Stateless) |
+
+## 👑 Admin Endpoints (Requires ADMIN role)
+
+| Method | Endpoint | Description | CSRF Required |
+|--------|----------|-------------|---------------|
+| POST | `/admin/add-user` | Add new user | No (Stateless) |
+
+# 🔐 Security Configuration
+
+## Current Configuration (Stateless Mode)
+
+```java
+@Configuration
+@EnableWebSecurity
+public class SecurityConfiguration {
+    
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
+            .csrf(Customizer -> Customizer.disable())  // CSRF DISABLED
+            .authorizeHttpRequests(request -> request
+                .requestMatchers("/user/**").hasAnyRole("ADMIN", "USER")
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/public/**").permitAll()
+                .anyRequest().authenticated())
+            .httpBasic(Customizer.withDefaults())  // HTTP Basic Auth only
+            .sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))  // STATELESS
+            .build();
+    }
+    
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(new BCryptPasswordEncoder(12));  // BCrypt hashing
+        provider.setUserDetailsService(userDetailsService);
+        return provider;
+    }
+}
+
+-- 🔄 Switching to Stateful Mode (with CSRF)
+
+// Change in SecurityConfiguration.java:
+.csrf(Customizer.withDefaults())  // Enable CSRF
+.sessionManagement(session -> session
+    .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))  // Stateful sessions
+.formLogin(Customizer.withDefaults())  // Add form login
+```
+
+### 🔑 Configuration Comparison
+
+| Feature | Stateful Mode | Stateless Mode |
+|---------|--------------|----------------|
+| **CSRF Protection** | ✅ Enabled | ❌ Disabled |
+| **Session Management** | 🔄 Stateful (Session-based) | ⚡ Stateless |
+| **Authentication Methods** | 🖥️ Form Login + Basic Auth | 🔐 Basic Auth Only |
+
+
+
+# 🧪 Testing the Application
+
+## Using cURL (Stateless Mode)
+
+```bash
+# Test public endpoint
+curl http://localhost:8080/public/home
+
+# Test authenticated endpoint (HTTP Basic Auth)
+curl -u subbu:123 http://localhost:8080/user/about
+
+# Add student (no CSRF required)
+curl -u subbu:123 -X POST http://localhost:8080/student \
+  -H "Content-Type: application/json" \
+  -d '{"rno":"101", "name":"John Doe", "dept":"CSE"}'
+
+# Get all students
+curl -u subbu:123 http://localhost:8080/student
+
+# Update student
+curl -u subbu:123 -X PUT http://localhost:8080/student/1 \
+  -H "Content-Type: application/json" \
+  -d '{"rno":"101", "name":"John Updated", "dept":"IT"}'
+
+# Check CSRF endpoint (returns null in stateless)
+curl http://localhost:8080/csrf
+```
+
+# 🎨 Using Postman
+
+## 📋 Setup Instructions
+
+1. **Create a new collection** named "Spring Security API"
+2. **Set Authorization Type** to "Basic Auth"
+3. **Enter Credentials:**
+   - **Username:** `subbu`
+   - **Password:** `123`
+4. **Important:** No CSRF tokens needed for any requests
+
+**Note:** These credentials correspond to the default user configured in `application.properties`
+
+# 📊 Database Schema
+
+## 👥 Users Table
+
+### Table Structure
+```sql
+CREATE TABLE users (
+    id INT PRIMARY KEY,
+    username VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Sample data
+INSERT INTO users (id, username, password, role) VALUES
+(1, 'admin', '$2a$12$YourBcryptHashHere', 'ADMIN'),
+(2, 'subbu', '$2a$12$AnotherBcryptHash', 'USER');
+```
+# 🎓 Student Table
+```sql
+CREATE TABLE student (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    rno VARCHAR(50) NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    dept VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+```
+# 🐛 Troubleshooting
+
+# 🔍 Common Issues & Solutions
+
+| Issue | Symptoms | Solution |
+|-------|----------|----------|
+| **🔌 MySQL Connection Failed** | Connection refused or Access denied error | 1. Check MySQL service: `sudo systemctl status mysql`<br>2. Verify credentials in `application.properties`<br>3. Ensure database exists: `CREATE DATABASE securitydemo;` |
+| **🚫 401 Unauthorized** | Authentication failure messages | 1. Verify username/password in Basic Auth header<br>2. Check `spring.security.user` properties<br>3. Ensure user exists in database |
+| **🚧 Port 8080 in Use** | Port 8080 already in use error | 1. Change port in `application.properties`<br>2. Kill existing process: `lsof -ti:8080 \| xargs kill -9`<br>3. Use different port: `server.port=9090` |
+| **👤 User Not Found** | UsernameNotFoundException | 1. Check database for user existence<br>2. Verify MyUserDetailsService implementation<br>3. Ensure correct username spelling |
+| **👑 Role Not Working** | 403 Forbidden despite successful login | 1. Check role prefix in `UserPrincipal.java`<br>2. Ensure role has `"ROLE_"` prefix<br>3. Verify role names in database |
+| **🔍 CSRF Returning Null** | `/csrf` endpoint returns null | ✅ **Expected behavior in stateless mode**<br>CSRF is disabled in current configuration |
+| **📦 Maven Build Failed** | Dependency resolution errors | 1. Clean Maven cache: `mvn clean`<br>2. Update dependencies: `mvn clean compile`<br>3. Check internet connection |
+
+
+
+## 🚀 2. Deploy Documentation
+
+Your documentation is already live at:
+🔗 **https://subburathinam-m.github.io/spring-security-docs/**
+
+---
+
+## 📚 Learning Resources
+
+### 📖 Documentation
+| Resource | Link | Description |
+|----------|------|-------------|
+| **Live Documentation** | [https://subburathinam-m.github.io/spring-security-docs/](https://subburathinam-m.github.io/spring-security-docs/) | Interactive guide with examples |
+| **Spring Security Docs** | [https://docs.spring.io/spring-security/reference/](https://docs.spring.io/spring-security/reference/) | Official Spring Security documentation |
+| **Spring Boot Guides** | [https://spring.io/guides](https://spring.io/guides) | Tutorials and getting started guides |
+
+### 📝 Related Articles
+| Article | Topic | Description |
+|---------|-------|-------------|
+| **Implementing CSRF Security in Spring Boot** | Stateful Security | Complete guide to CSRF protection in Spring applications |
+| **Stateless REST API Security** | Stateless Security | Best practices for securing stateless REST APIs |
+
+---
+
+## 👥 Contributing
+
+### 🤝 How to Contribute
+1. **🍴 Fork** the repository
+2. **🌿 Create** a feature branch: `git checkout -b feature-name`
+3. **💾 Commit** your changes: `git commit -m 'Add feature'`
+4. **📤 Push** to branch: `git push origin feature-name`
+5. **🔀 Open** a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 👨‍💻 Author
+
+**Subburathinam M**  
+- **🐙 GitHub**: [@subburathinam-m](https://github.com/subburathinam-m)
+- **📚 Live Documentation**: [https://subburathinam-m.github.io/spring-security-docs/](https://subburathinam-m.github.io/spring-security-docs/)
+
+---
+
+## ⭐ Support
+
+If you find this project helpful, please give it a **⭐ star** on GitHub!
+
+---
+
+*🚀 Built with ❤️ using Spring Boot, Spring Security, and MySQL*
