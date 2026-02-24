@@ -33,7 +33,7 @@ graph TD
     I --> J["🗃️ Database"]
     J --> K["📤 Response to Client"]
 
-    subgraph 🔀 Authentication Modes
+    subgraph Authentication_Modes
         L["🔄 Stateful Mode"] --> M["🔒 CSRF Enabled\n💾 Session Based"]
         N["⚡ Stateless Mode"] --> O["🚫 CSRF Disabled\n🔑 HTTP Basic Auth"]
     end
