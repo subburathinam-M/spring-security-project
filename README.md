@@ -19,27 +19,29 @@ A comprehensive Spring Security implementation demonstrating both **Stateful (wi
 
 ```mermaid
 graph TD
-    A[🌐 Client Request] --> B[🛡️ Spring Security Filter Chain]
-    B --> C{🔐 Authentication Check}
-    C -->|✅ Success| D[👑 Authorization Check]
-    C -->|❌ Failure| E[🚫 401 Unauthorized]
-    D -->|✅ Has Role| F[🎯 Access Granted]
-    D -->|❌ No Role| G[🚷 403 Forbidden]
-    F --> H[⚙️ Controller Processing]
-    H --> I[🔧 Service Layer]
-    I --> J[🗃️ Database]
-    J --> K[📤 Response to Client]
-    
-    subgraph "🔀 Authentication Modes"
-        L[🔄 Stateful Mode] --> M[🔒 CSRF Enabled<br/>💾 Session Based]
-        N[⚡ Stateless Mode] --> O[🚫 CSRF Disabled<br/>🔑 HTTP Basic Auth]
-    end
+    A["🌐 Client Request"] --> B["🛡️ Spring Security Filter Chain"]
+    B --> C{"🔐 Authentication Check"}
 
+    C -->|✅ Success| D["👑 Authorization Check"]
+    C -->|❌ Failure| E["🚫 401 Unauthorized"]
+
+    D -->|✅ Has Role| F["🎯 Access Granted"]
+    D -->|❌ No Role| G["🚷 403 Forbidden"]
+
+    F --> H["⚙️ Controller Processing"]
+    H --> I["🔧 Service Layer"]
+    I --> J["🗃️ Database"]
+    J --> K["📤 Response to Client"]
+
+    subgraph 🔀 Authentication Modes
+        L["🔄 Stateful Mode"] --> M["🔒 CSRF Enabled\n💾 Session Based"]
+        N["⚡ Stateless Mode"] --> O["🚫 CSRF Disabled\n🔑 HTTP Basic Auth"]
+    end
 ```
 
 
 # 📈 Flow Diagram
-
+```
 ┌─────────────────┐     ┌─────────────────────┐     ┌─────────────────────┐
 │    🌐 Client    │────▶│   🛡️ Spring Security  │────▶│   🔐 Authentication   │
 │    📤 Request   │     │   🔗 Filter Chain    │     │     ⚙️ Provider       │
@@ -56,6 +58,7 @@ graph TD
                                                         │   💾 JPA Repository  │
                                                         │   🗃️ (Database)      │
                                                         └─────────────────────┘
+```
 
 # 🚀 Features
 
