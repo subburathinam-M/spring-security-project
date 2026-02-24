@@ -84,7 +84,7 @@ Simply open `index.html` in any modern web browser.
 
 ## 👥 Contributors
 
-- **Your Name** - Documentation & Implementation
+- **Subburathinam M** - Documentation & Implementation
 - [Add contributors here]
 
 ## 📄 License
